@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Crimson 16415 | FTC DECODE 2025</title>
+    <!-- Import an "Ancient/Modern" font -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- THEME VARIABLES --- */
+        :root {
+            --crimson: #DC143C;
+            --dark-crimson: #8a0b22;
+            --gold: #D4AF37;       /* Egyptian Gold */
+            --sand: #C2B280;       /* Sand accent */
+            --black: #050505;
+            --panel-bg: #0f0f0f;
+            --border: #333333;
+            --font-main: 'Orbitron', sans-serif; /* Tech feel */
+            --font-ancient: 'Cinzel', serif;     /* Egyptian feel */
+        }
+
+        /* --- RESET & SETUP --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background-color: var(--black);
+            color: var(--sand);
+            font-family: var(--font-main);
+            line-height: 1.6;
+            overflow-x: hidden; /* Hide overflow for transitions */
+        }
+
+        /* --- BACKGROUND EFFECTS (Dust & Grid) --- */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(rgba(212, 175, 55, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(212, 175, 55, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        /* Floating Dust Particles */
+        .particles {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .particle {
+            position: absolute;
+            background: var(--gold);
+            width: 2px; height: 2px;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: floatUp 10s infinite linear;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+            50% { opacity: 0.5; }
+            100% { transform: translateY(-10vh) translateX(20px); opacity: 0; }
+        }
+
+        /* --- PAGE TRANSITION OVERLAY (The Golden Gates) --- */
+        .transition-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 9999;
+            display: flex;
+            pointer-events: none; /* Let clicks pass through when hidden */
+        }
+        
+        .gate-panel {
+            width: 50%;
+            height: 100%;
+            background: var(--black);
+            border-bottom: 5px solid var(--crimson);
+            position: relative;
+            transform: scaleX(0); /* Hidden state */
+            transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+
+        .gate-left { 
+            transform-origin: left; 
+            border-right: 2px solid var(--gold);
+        }
+        .gate-right { 
+            transform-origin: right; 
+            border-left: 2px solid var(--gold);
+        }
+
+        /* Active state for transition */
+        .transition-active .gate-panel {
+            transform: scaleX(1); /* Closed state */
+        }
+        
+        .transition-active {
+            pointer-events: all; /* Block clicks during transition */
+        }
+
+        /* --- SIDEBAR DECODER (Hieroglyphs) --- */
+        .decoder-sidebar {
+            position: fixed;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            padding: 20px 0;
+            background: rgba(10, 10, 10, 0.8);
+            border-left: 1px solid var(--gold);
+            border-top: 1px solid var(--crimson);
+            border-bottom: 1px solid var(--crimson);
+            z-index: 500;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: width 0.4s ease, background 0.4s;
+            cursor: help;
+            overflow: hidden;
+            box-shadow: -5px 0 15px rgba(220, 20, 60, 0.2);
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+        }
+
+        .decoder-sidebar:hover {
+            width: 250px; /* Expand on hover */
+            background: var(--black);
+        }
+
+        .decoder-content {
+            writing-mode: vertical-rl;
+            text-orientation: upright;
+            font-size: 1.5rem;
+            letter-spacing: 5px;
+            color: var(--gold);
+            text-shadow: 0 0 5px var(--crimson);
+            white-space: nowrap;
+            font-family: 'Segoe UI Symbol', sans-serif; /* For Hieroglyphs */
+            transition: opacity 0.3s;
+            user-select: none;
+        }
+
+        .decoder-hidden-text {
+            position: absolute;
+            writing-mode: vertical-rl;
+            text-orientation: upright;
+            font-family: var(--font-ancient);
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--crimson);
+            letter-spacing: 3px;
+            opacity: 0;
+            transition: opacity 0.4s 0.1s; /* Slight delay */
+            text-shadow: 0 0 10px var(--gold);
+        }
+
+        .decoder-sidebar:hover .decoder-content { opacity: 0.1; }
+        .decoder-sidebar:hover .decoder-hidden-text { opacity: 1; }
+
+
+        /* --- NAVIGATION --- */
+        header {
+            background-color: rgba(5, 5, 5, 0.95);
+            border-bottom: 2px solid var(--crimson);
+            padding: 0 5%;
+            height: 80px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.8);
+        }
+
+        .logo {
+            font-family: var(--font-main);
+            font-size: 1.5rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--white);
+        }
+        .logo span { color: var(--crimson); }
+
+        nav ul { list-style: none; display: flex; }
+        nav ul li { margin-left: 2rem; }
+
+        nav ul li a {
+            color: var(--sand);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            padding-bottom: 5px;
+            border-bottom: 2px solid transparent;
+            font-family: var(--font-main);
+        }
+
+        nav ul li a:hover, nav ul li a.active {
+            color: var(--crimson);
+            border-bottom: 2px solid var(--gold);
+            text-shadow: 0 0 8px var(--crimson);
+        }
+
+        /* --- PAGE CONTENT (SPA) --- */
+        .page-section {
+            display: none;
+            padding: 3rem 10%;
+            min-height: calc(100vh - 80px);
+            opacity: 0;
+        }
+
+        .page-section.active-page {
+            display: block;
+            animation: contentFadeIn 0.8s forwards;
+        }
+
+        @keyframes contentFadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1, h2, h3 { 
+            text-transform: uppercase; 
+            font-family: var(--font-ancient);
+        }
+        
+        h2 {
+            border-left: 5px solid var(--crimson);
+            padding-left: 15px;
+            margin-bottom: 2rem;
+            font-size: 2.5rem;
+            color: var(--gold);
+        }
+
+        /* --- HOME STYLES --- */
+        .hero { text-align: center; margin-top: 2rem; }
+        .hero h1 { 
+            font-size: 3.5rem; 
+            line-height: 1.1; 
+            margin-bottom: 1rem; 
+            background: linear-gradient(to right, var(--white), var(--sand));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero h1 span { 
+            background: none; 
+            -webkit-text-fill-color: var(--crimson); 
+            color: var(--crimson);
+        }
+        
+        .season-tag {
+            background: var(--dark-crimson);
+            color: var(--gold);
+            border: 1px solid var(--gold);
+            padding: 5px 15px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+        }
+
+        .robot-showcase {
+            background: rgba(0,0,0,0.5);
+            border: 1px solid var(--gold);
+            padding: 10px; /* Cartouche border style */
+            border-radius: 15px;
+            max-width: 800px;
+            margin: 2rem auto;
+            box-shadow: 0 0 30px rgba(220, 20, 60, 0.15);
+            position: relative;
+        }
+        
+        /* Egyptian corner accents for robot image */
+        .robot-showcase::after, .robot-showcase::before {
+            content: ""; position: absolute; width: 20px; height: 20px;
+            border: 2px solid var(--crimson); transition: all 0.3s;
+        }
+        .robot-showcase::before { top: -5px; left: -5px; border-right: none; border-bottom: none; }
+        .robot-showcase::after { bottom: -5px; right: -5px; border-left: none; border-top: none; }
+
+        .robot-img { width: 100%; border-radius: 5px; display: block; }
+
+        .judges-note {
+            background: var(--panel-bg);
+            border-left: 4px solid var(--gold);
+            padding: 2rem;
+            margin-top: 3rem;
+            position: relative;
+        }
+        .judges-note::before {
+            content: "EYE OF HORUS"; /* Just decorative text reference */
+            position: absolute; top: -10px; left: 10px;
+            font-size: 0.7rem; background: var(--black); color: var(--gold); padding: 0 5px;
+        }
+
+        /* --- TEAM GRID --- */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .member-card {
+            background: var(--panel-bg);
+            padding: 2rem;
+            border: 1px solid var(--border);
+            border-top: 3px solid var(--crimson);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .member-card:hover { 
+            transform: translateY(-5px); 
+            border-color: var(--gold);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.1);
+        }
+        
+        .role { color: var(--crimson); font-weight: bold; font-family: var(--font-main); font-size: 0.8rem; margin-bottom: 0.5rem; letter-spacing: 1px; }
+
+        /* --- CALENDAR --- */
+        .calendar-container {
+            background: var(--panel-bg);
+            padding: 2rem;
+            border-radius: 2px;
+            border: 1px solid var(--gold);
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 2px;
+            background: var(--border);
+        }
+
+        .cal-cell {
+            background: #111;
+            min-height: 100px;
+            padding: 10px;
+            position: relative;
+            font-family: var(--font-main);
+        }
+
+        .cal-head {
+            background: #222;
+            text-align: center;
+            font-weight: bold;
+            padding: 10px 0;
+            min-height: auto;
+            color: var(--gold);
+        }
+
+        .cal-cell.today { border: 1px solid var(--white); box-shadow: inset 0 0 10px rgba(255,255,255,0.2); }
+        
+        .cal-cell.meeting {
+            background: rgba(220, 20, 60, 0.15);
+        }
+        .cal-cell.meeting::after {
+            content: "MEETING";
+            display: block;
+            font-size: 0.65rem;
+            background: var(--crimson);
+            color: white;
+            padding: 2px 4px;
+            margin-top: 5px;
+            text-align: center;
+        }
+
+        .cal-btn {
+            background: transparent;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            padding: 5px 15px;
+            cursor: pointer;
+            font-family: var(--font-ancient);
+            transition: 0.3s;
+        }
+        .cal-btn:hover { background: var(--gold); color: var(--black); }
+
+        /* --- CONTACT --- */
+        .contact-form { max-width: 600px; margin: 0 auto; }
+        .form-group { margin-bottom: 1.5rem; }
+        
+        input, textarea {
+            width: 100%;
+            padding: 15px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--border);
+            color: var(--sand);
+            font-family: var(--font-main);
+            transition: 0.3s;
+        }
+        
+        input:focus, textarea:focus { 
+            outline: none; 
+            border-left-color: var(--gold);
+            box-shadow: -5px 0 10px rgba(212, 175, 55, 0.1);
+        }
+        
+        button.submit-btn {
+            background: var(--crimson);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: var(--font-ancient);
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        button.submit-btn:hover { 
+            background: var(--gold); 
+            color: var(--black);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: auto;
+            border-top: 1px solid var(--border);
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            header { flex-direction: column; height: auto; padding: 1rem; }
+            nav ul { margin-top: 1rem; flex-wrap: wrap; justify-content: center; }
+            nav ul li { margin: 5px 10px; }
+            .decoder-sidebar { display: none; } /* Hide sidebar on mobile */
+            .hero h1 { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PARTICLES EFFECT -->
+    <div class="particles" id="particles"></div>
+
+    <!-- TRANSITION GATES -->
+    <div class="transition-overlay" id="transition-overlay">
+        <div class="gate-panel gate-left"></div>
+        <div class="gate-panel gate-right"></div>
+    </div>
+
+    <!-- SIDEBAR DECODER -->
+    <div class="decoder-sidebar">
+        <!-- The Unicode characters here are Egyptian Hieroglyphs -->
+        <div class="decoder-content">
+            𓃀𓇋𓈖𓄿𓂋𓇋<br>
+            𓆑𓅱𓏏𓅱𓂋𓅂<br>
+            𓋴𓏏𓅂𓅓
+        </div>
+        <div class="decoder-hidden-text">
+            CRIMSON<br>
+            CARDINALS
+        </div>
+    </div>
+
+    <!-- NAVIGATION -->
+    <header>
+        <div class="logo">Team <span>Crimson</span> 16415</div>
+        <nav>
+            <ul>
+                <li><a onclick="navigateTo('home')" id="nav-home" class="active">Home</a></li>
+                <li><a onclick="navigateTo('team')" id="nav-team">Meet Our Team</a></li>
+                <li><a onclick="navigateTo('events')" id="nav-events">Events</a></li>
+                <li><a onclick="navigateTo('contact')" id="nav-contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- === PAGE 1: HOME === -->
+    <div id="home" class="page-section active-page">
+        <div class="hero">
+            <div class="season-tag">FTC SEASON 2025-2026: DECODE</div>
+            <h1>UNEARTH THE <br><span>FUTURE</span></h1>
+            
+            <div class="robot-showcase">
+                <!-- ROBOT IMAGE -->
+                <img src="robot.png" alt="Team Crimson Robot" class="robot-img">
+            </div>
+
+            <p style="max-width: 700px; margin: 0 auto; color: var(--sand); font-size: 1.1rem; text-shadow: 0 0 5px black;">
+                We are Team Crimson 16415. Like archaeologists of technology, we decode complex problems to build robust robotic solutions.
+            </p>
+        </div>
+
+        <div class="judges-note">
+            <h3 style="color: var(--crimson);">The Crimson Impact</h3>
+            <p style="color: #ccc;">
+                <strong>Judge's Abstract:</strong> This season, the "Crimson Cardinals" have embraced the DECODE theme by bridging ancient engineering principles with modern Java programming.
+            </p>
+            <br>
+            <ul style="margin-left: 20px; color: var(--sand);">
+                <li>★ <strong>Outreach:</strong> "Hieroglyphs to HTML" coding camp for 40+ students.</li>
+                <li>★ <strong>Design:</strong> Modular chassis design inspired by pyramid structural integrity.</li>
+                <li>★ <strong>Code:</strong> Open-source vision library for the DECODE game elements.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- === PAGE 2: TEAM === -->
+    <div id="team" class="page-section">
+        <h2>The Architects</h2>
+        <p style="color: var(--sand); margin-bottom: 2rem;">Meet the Crimson Cardinals behind the machine.</p>
+
+        <div class="team-grid">
+            <div class="member-card">
+                <div class="role">PHARAOH (CAPTAIN)</div>
+                <h3>Alex M.</h3>
+                <p style="color: #999; margin-top: 10px;">Leads the build team and ensures mechanical stability.</p>
+            </div>
+            <div class="member-card">
+                <div class="role">SCRIBE (PROGRAMMER)</div>
+                <h3>Sarah J.</h3>
+                <p style="color: #999; margin-top: 10px;">Writes the autonomous scripts to decipher the game field.</p>
+            </div>
+            <div class="member-card">
+                <div class="role">ENVOY (OUTREACH)</div>
+                <h3>David L.</h3>
+                <p style="color: #999; margin-top: 10px;">Connects the team with the community and sponsors.</p>
+            </div>
+            <div class="member-card">
+                <div class="role">ARTISAN (CAD)</div>
+                <h3>Emily R.</h3>
+                <p style="color: #999; margin-top: 10px;">Designs custom 3D printed parts for the intake system.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- === PAGE 3: EVENTS === -->
+    <div id="events" class="page-section">
+        <h2>Temporal Log</h2>
+        <p style="color: var(--sand); margin-bottom: 2rem;">
+            Mission Timeline. Meetings: Tuesdays & Thursdays.
+        </p>
+
+        <div class="calendar-container">
+            <div class="calendar-header">
+                <h2 style="border: none; margin: 0; font-size: 1.5rem; color:var(--white)" id="cal-month-year">September 2025</h2>
+                <div>
+                    <button class="cal-btn" onclick="changeMonth(-1)">&#8592;</button>
+                    <button class="cal-btn" onclick="changeMonth(1)">&#8594;</button>
+                </div>
+            </div>
+            
+            <div class="calendar-grid" id="calendar-grid">
+                <!-- JS GENERATED -->
+            </div>
+        </div>
+    </div>
+
+    <!-- === PAGE 4: CONTACT === -->
+    <div id="contact" class="page-section">
+        <h2>Send Inscription</h2>
+        <p style="color: var(--sand); margin-bottom: 2rem;">
+            Contact the Crimson Cardinals for alliances or sponsorship.
+        </p>
+
+        <form class="contact-form" onsubmit="event.preventDefault(); alert('Inscription Sent to the Cloud!');">
+            <div class="form-group">
+                <label style="display:block; margin-bottom: 5px; color: var(--gold);">Name</label>
+                <input type="text" placeholder="Explorer Name" required>
+            </div>
+            <div class="form-group">
+                <label style="display:block; margin-bottom: 5px; color: var(--gold);">Email</label>
+                <input type="email" placeholder="explorer@site.com" required>
+            </div>
+            <div class="form-group">
+                <label style="display:block; margin-bottom: 5px; color: var(--gold);">Message</label>
+                <textarea rows="6" placeholder="Decipher your request here..." required></textarea>
+            </div>
+            <button type="submit" class="submit-btn">Transmit</button>
+        </form>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Team Crimson 16415. The Crimson Cardinals.</p>
+        <p>FTC DECODE Season.</p>
+    </footer>
+
+    <!-- === JAVASCRIPT === -->
+    <script>
+        // --- PARTICLE GENERATOR ---
+        const particleContainer = document.getElementById('particles');
+        for(let i=0; i<30; i++) {
+            const p = document.createElement('div');
+            p.classList.add('particle');
+            p.style.left = Math.random() * 100 + 'vw';
+            p.style.animationDuration = (Math.random() * 5 + 5) + 's';
+            p.style.animationDelay = (Math.random() * 5) + 's';
+            particleContainer.appendChild(p);
+        }
+
+        // --- PAGE TRANSITION LOGIC ---
+        function navigateTo(pageId) {
+            // 1. Trigger Gate Animation
+            const overlay = document.getElementById('transition-overlay');
+            overlay.classList.add('transition-active');
+
+            // 2. Wait for gates to close (500ms), then switch content
+            setTimeout(() => {
+                // Hide all pages
+                document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active-page'));
+                
+                // Show new page
+                document.getElementById(pageId).classList.add('active-page');
+                
+                // Update Nav
+                document.querySelectorAll('nav ul li a').forEach(a => a.classList.remove('active'));
+                document.getElementById('nav-' + pageId).classList.add('active');
+
+                // Scroll top
+                window.scrollTo(0,0);
+
+                // 3. Open Gates
+                setTimeout(() => {
+                    overlay.classList.remove('transition-active');
+                }, 300); // Slight delay before opening
+
+            }, 500); // Matches CSS transition time
+        }
+
+        // --- CALENDAR LOGIC (Same as before) ---
+        const calendarGrid = document.getElementById('calendar-grid');
+        const monthLabel = document.getElementById('cal-month-year');
+        const seasonStart = new Date(2025, 8, 1);
+        const seasonEnd = new Date(2025, 11, 20);
+        let viewDate = new Date(2025, 8, 1); 
+
+        function renderCalendar() {
+            calendarGrid.innerHTML = "";
+            const year = viewDate.getFullYear();
+            const month = viewDate.getMonth();
+            const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            monthLabel.innerText = `${months[month]} ${year}`;
+
+            ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].forEach(d => {
+                const cell = document.createElement('div');
+                cell.className = 'cal-cell cal-head';
+                cell.innerText = d;
+                calendarGrid.appendChild(cell);
+            });
+
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            for(let i=0; i<firstDay; i++) {
+                const c = document.createElement('div');
+                c.className = 'cal-cell'; c.style.background='transparent';
+                calendarGrid.appendChild(c);
+            }
+
+            const today = new Date();
+            for(let i=1; i<=daysInMonth; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'cal-cell';
+                cell.innerText = i;
+                const dDate = new Date(year, month, i);
+
+                if(dDate.getDate()===today.getDate() && dDate.getMonth()===today.getMonth() && dDate.getFullYear()===today.getFullYear()) {
+                    cell.classList.add('today');
+                }
+
+                if (dDate >= seasonStart && dDate <= seasonEnd) {
+                    if (dDate.getDay() === 2 || dDate.getDay() === 4) {
+                        cell.classList.add('meeting');
+                    }
+                }
+                calendarGrid.appendChild(cell);
+            }
+        }
+
+        function changeMonth(offset) {
+            viewDate.setMonth(viewDate.getMonth() + offset);
+            renderCalendar();
+        }
+
+        renderCalendar();
+    </script>
+</body>
+</html>
