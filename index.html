@@ -14,8 +14,8 @@
             --dark-crimson: #8a0b22;
             --gold: #D4AF37;       /* Egyptian Gold */
             --sand: #C2B280;       /* Sand accent */
-            --black: #050505;
-            --panel-bg: #0f0f0f;
+            --black: #020100;      /* Very dark brown/black for cave */
+            --panel-bg: rgba(15, 10, 5, 0.95); /* Dark tint */
             --border: #333333;
             --font-main: 'Orbitron', sans-serif; /* Tech feel */
             --font-ancient: 'Cinzel', serif;     /* Egyptian feel */
@@ -29,42 +29,48 @@
             color: var(--sand);
             font-family: var(--font-main);
             line-height: 1.6;
-            overflow-x: hidden; /* Hide overflow for transitions */
+            overflow-x: hidden;
+            overflow-y: scroll;
         }
 
-        /* --- BACKGROUND EFFECTS (Dust & Grid) --- */
-        body::before {
-            content: "";
+        /* --- CAVE TUNNEL BACKGROUND --- */
+        /* This creates the depth and the "light at the end of the tunnel" */
+        .cave-bg {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background-image: 
-                linear-gradient(rgba(212, 175, 55, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(212, 175, 55, 0.03) 1px, transparent 1px);
-            background-size: 50px 50px;
+            z-index: -3;
+            background: radial-gradient(circle at 50% 50%, #4a3b1a 0%, #1a0f05 40%, #000000 90%);
+            animation: torchFlicker 4s infinite alternate ease-in-out;
+        }
+
+        /* Simulates ambient torch light moving */
+        @keyframes torchFlicker {
+            0% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.02); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.9; }
+        }
+
+        /* --- TUNNEL PARTICLES (THE MOVING STARS) --- */
+        .tunnel-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
             z-index: -2;
             pointer-events: none;
-        }
-
-        /* Floating Dust Particles */
-        .particles {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1;
-            pointer-events: none;
+            perspective: 500px; /* 3D Perspective */
             overflow: hidden;
         }
+
         .particle {
             position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 4px;
+            height: 4px;
             background: var(--gold);
-            width: 2px; height: 2px;
             border-radius: 50%;
-            opacity: 0.3;
-            animation: floatUp 10s infinite linear;
-        }
-        @keyframes floatUp {
-            0% { transform: translateY(100vh) translateX(0); opacity: 0; }
-            50% { opacity: 0.5; }
-            100% { transform: translateY(-10vh) translateX(20px); opacity: 0; }
+            box-shadow: 0 0 6px var(--crimson); /* Crimson glow */
+            opacity: 0;
+            will-change: transform, opacity;
         }
 
         /* --- PAGE TRANSITION OVERLAY (The Golden Gates) --- */
@@ -73,17 +79,18 @@
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: 9999;
             display: flex;
-            pointer-events: none; /* Let clicks pass through when hidden */
+            pointer-events: none; 
         }
         
         .gate-panel {
             width: 50%;
             height: 100%;
-            background: var(--black);
+            background: #0a0500; /* Darker cave color */
             border-bottom: 5px solid var(--crimson);
             position: relative;
-            transform: scaleX(0); /* Hidden state */
+            transform: scaleX(0); 
             transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+            background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1h2v2H1V1zm4 4h2v2H5V5zm4 4h2v2H9V9z' fill='%23D4AF37' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
         }
 
         .gate-left { 
@@ -95,13 +102,12 @@
             border-left: 2px solid var(--gold);
         }
 
-        /* Active state for transition */
         .transition-active .gate-panel {
-            transform: scaleX(1); /* Closed state */
+            transform: scaleX(1); 
         }
         
         .transition-active {
-            pointer-events: all; /* Block clicks during transition */
+            pointer-events: all;
         }
 
         /* --- SIDEBAR DECODER (Hieroglyphs) --- */
@@ -112,7 +118,7 @@
             transform: translateY(-50%);
             width: 50px;
             padding: 20px 0;
-            background: rgba(10, 10, 10, 0.8);
+            background: rgba(20, 10, 5, 0.9);
             border-left: 1px solid var(--gold);
             border-top: 1px solid var(--crimson);
             border-bottom: 1px solid var(--crimson);
@@ -129,8 +135,8 @@
         }
 
         .decoder-sidebar:hover {
-            width: 250px; /* Expand on hover */
-            background: var(--black);
+            width: 250px;
+            background: #000;
         }
 
         .decoder-content {
@@ -141,7 +147,7 @@
             color: var(--gold);
             text-shadow: 0 0 5px var(--crimson);
             white-space: nowrap;
-            font-family: 'Segoe UI Symbol', sans-serif; /* For Hieroglyphs */
+            font-family: 'Segoe UI Symbol', sans-serif;
             transition: opacity 0.3s;
             user-select: none;
         }
@@ -156,13 +162,12 @@
             color: var(--crimson);
             letter-spacing: 3px;
             opacity: 0;
-            transition: opacity 0.4s 0.1s; /* Slight delay */
+            transition: opacity 0.4s 0.1s;
             text-shadow: 0 0 10px var(--gold);
         }
 
         .decoder-sidebar:hover .decoder-content { opacity: 0.1; }
         .decoder-sidebar:hover .decoder-hidden-text { opacity: 1; }
-
 
         /* --- NAVIGATION --- */
         header {
@@ -225,8 +230,8 @@
         }
 
         @keyframes contentFadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; transform: scale(0.98) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
         }
 
         h1, h2, h3 { 
@@ -240,6 +245,7 @@
             margin-bottom: 2rem;
             font-size: 2.5rem;
             color: var(--gold);
+            text-shadow: 2px 2px 5px #000;
         }
 
         /* --- HOME STYLES --- */
@@ -248,13 +254,10 @@
             font-size: 3.5rem; 
             line-height: 1.1; 
             margin-bottom: 1rem; 
-            background: linear-gradient(to right, var(--white), var(--sand));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: var(--white);
+            text-shadow: 0 0 10px rgba(220, 20, 60, 0.5);
         }
         .hero h1 span { 
-            background: none; 
-            -webkit-text-fill-color: var(--crimson); 
             color: var(--crimson);
         }
         
@@ -271,17 +274,16 @@
         }
 
         .robot-showcase {
-            background: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.6);
             border: 1px solid var(--gold);
-            padding: 10px; /* Cartouche border style */
+            padding: 10px;
             border-radius: 15px;
             max-width: 800px;
             margin: 2rem auto;
-            box-shadow: 0 0 30px rgba(220, 20, 60, 0.15);
+            box-shadow: 0 0 50px rgba(220, 20, 60, 0.2);
             position: relative;
         }
         
-        /* Egyptian corner accents for robot image */
         .robot-showcase::after, .robot-showcase::before {
             content: ""; position: absolute; width: 20px; height: 20px;
             border: 2px solid var(--crimson); transition: all 0.3s;
@@ -297,9 +299,10 @@
             padding: 2rem;
             margin-top: 3rem;
             position: relative;
+            box-shadow: 0 0 20px #000;
         }
         .judges-note::before {
-            content: "EYE OF HORUS"; /* Just decorative text reference */
+            content: "EYE OF HORUS"; 
             position: absolute; top: -10px; left: 10px;
             font-size: 0.7rem; background: var(--black); color: var(--gold); padding: 0 5px;
         }
@@ -319,12 +322,13 @@
             transition: all 0.3s;
             position: relative;
             overflow: hidden;
+            box-shadow: 0 0 10px #000;
         }
 
         .member-card:hover { 
             transform: translateY(-5px); 
             border-color: var(--gold);
-            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.1);
+            box-shadow: 0 5px 25px rgba(212, 175, 55, 0.15);
         }
         
         .role { color: var(--crimson); font-weight: bold; font-family: var(--font-main); font-size: 0.8rem; margin-bottom: 0.5rem; letter-spacing: 1px; }
@@ -335,6 +339,7 @@
             padding: 2rem;
             border-radius: 2px;
             border: 1px solid var(--gold);
+            box-shadow: 0 0 20px #000;
         }
 
         .calendar-header {
@@ -445,6 +450,7 @@
             color: #666;
             margin-top: auto;
             border-top: 1px solid var(--border);
+            background: rgba(0,0,0,0.8);
         }
 
         /* Mobile */
@@ -452,15 +458,16 @@
             header { flex-direction: column; height: auto; padding: 1rem; }
             nav ul { margin-top: 1rem; flex-wrap: wrap; justify-content: center; }
             nav ul li { margin: 5px 10px; }
-            .decoder-sidebar { display: none; } /* Hide sidebar on mobile */
+            .decoder-sidebar { display: none; } 
             .hero h1 { font-size: 2.5rem; }
         }
     </style>
 </head>
 <body>
 
-    <!-- PARTICLES EFFECT -->
-    <div class="particles" id="particles"></div>
+    <!-- BACKGROUND: CAVE TUNNEL EFFECT -->
+    <div class="cave-bg"></div>
+    <div class="tunnel-container" id="tunnel"></div>
 
     <!-- TRANSITION GATES -->
     <div class="transition-overlay" id="transition-overlay">
@@ -502,11 +509,11 @@
             <h1>UNEARTH THE <br><span>FUTURE</span></h1>
             
             <div class="robot-showcase">
-                <!-- ROBOT IMAGE - UPDATED HERE -->
+                <!-- ROBOT IMAGE - UPDATED -->
                 <img src="robot-render.png" alt="Team Crimson Robot" class="robot-img">
             </div>
 
-            <p style="max-width: 700px; margin: 0 auto; color: var(--sand); font-size: 1.1rem; text-shadow: 0 0 5px black;">
+            <p style="max-width: 700px; margin: 0 auto; color: var(--sand); font-size: 1.1rem; text-shadow: 0 0 5px black; background: rgba(0,0,0,0.4); padding: 10px; border-radius: 5px;">
                 We are Team Crimson 16415. Like archaeologists of technology, we decode complex problems to build robust robotic solutions.
             </p>
         </div>
@@ -555,25 +562,25 @@
                 <h3>Fengning Ye.</h3>
                 <p style="color: #999; margin-top: 10px;">Grade 10.</p>
             </div>
-            <!-- Member 5 (NEW) -->
+            <!-- Member 5 -->
             <div class="member-card">
                 <div class="role">Outreach.</div>
                 <h3>Jack Mastroianni.</h3>
                 <p style="color: #999; margin-top: 10px;">Grade 10.</p>
             </div>
-            <!-- Member 6 (NEW) -->
+            <!-- Member 6 -->
             <div class="member-card">
                 <div class="role">Lead Trades</div>
                 <h3>Rhys Koko.</h3>
                 <p style="color: #999; margin-top: 10px;">Grade 11.</p>
             </div>
-            <!-- Member 7 (NEW) -->
+            <!-- Member 7 -->
             <div class="member-card">
                 <div class="role">Trades</div>
                 <h3>Miguel Acuna.</h3>
                 <p style="color: #999; margin-top: 10px;">Grade 11.</p>
             </div>
-            <!-- Member 8 (NEW) -->
+            <!-- Member 8 -->
             <div class="member-card">
                 <div class="role">Lead Strategy</div>
                 <h3>Daniel Kulik.</h3>
@@ -635,47 +642,74 @@
 
     <!-- === JAVASCRIPT === -->
     <script>
-        // --- PARTICLE GENERATOR ---
-        const particleContainer = document.getElementById('particles');
-        for(let i=0; i<30; i++) {
+        // --- TUNNEL MOVEMENT LOGIC ---
+        // This generates particles that fly "Outwards" to simulate moving through a tunnel
+        const tunnelContainer = document.getElementById('tunnel');
+        const particleCount = 60;
+
+        for (let i = 0; i < particleCount; i++) {
+            createTunnelParticle(true);
+        }
+
+        function createTunnelParticle(randomDelay = false) {
             const p = document.createElement('div');
             p.classList.add('particle');
-            p.style.left = Math.random() * 100 + 'vw';
-            p.style.animationDuration = (Math.random() * 5 + 5) + 's';
-            p.style.animationDelay = (Math.random() * 5) + 's';
-            particleContainer.appendChild(p);
+            
+            // Random angle around the center (0 to 360 degrees)
+            const angle = Math.random() * Math.PI * 2;
+            // The distance to travel (off screen)
+            const distance = 1000 + Math.random() * 500;
+            
+            // Calculate destination X/Y based on angle
+            const destX = Math.cos(angle) * distance;
+            const destY = Math.sin(angle) * distance;
+
+            // Randomize size for depth perception (dust vs rocks)
+            const size = Math.random() * 3 + 1;
+            p.style.width = size + 'px';
+            p.style.height = size + 'px';
+
+            // Set up animation using Web Animations API for better performance
+            const duration = 2000 + Math.random() * 3000; // 2s to 5s travel time
+            const delay = randomDelay ? Math.random() * -5000 : 0; // Negative delay to start mid-animation
+
+            const animation = p.animate([
+                { transform: 'translate(-50%, -50%) scale(0)', opacity: 0, offset: 0 },
+                { opacity: 1, offset: 0.1 },
+                { opacity: 1, offset: 0.8 },
+                { transform: `translate(calc(-50% + ${destX}px), calc(-50% + ${destY}px)) scale(5)`, opacity: 0, offset: 1 }
+            ], {
+                duration: duration,
+                delay: delay,
+                iterations: Infinity,
+                easing: 'ease-in' // Accelerate out
+            });
+
+            tunnelContainer.appendChild(p);
         }
 
         // --- PAGE TRANSITION LOGIC ---
         function navigateTo(pageId) {
-            // 1. Trigger Gate Animation
             const overlay = document.getElementById('transition-overlay');
             overlay.classList.add('transition-active');
 
-            // 2. Wait for gates to close (500ms), then switch content
             setTimeout(() => {
-                // Hide all pages
                 document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active-page'));
-                
-                // Show new page
                 document.getElementById(pageId).classList.add('active-page');
                 
-                // Update Nav
                 document.querySelectorAll('nav ul li a').forEach(a => a.classList.remove('active'));
                 document.getElementById('nav-' + pageId).classList.add('active');
 
-                // Scroll top
                 window.scrollTo(0,0);
 
-                // 3. Open Gates
                 setTimeout(() => {
                     overlay.classList.remove('transition-active');
-                }, 300); // Slight delay before opening
+                }, 300); 
 
-            }, 500); // Matches CSS transition time
+            }, 500);
         }
 
-        // --- CALENDAR LOGIC (Same as before) ---
+        // --- CALENDAR LOGIC ---
         const calendarGrid = document.getElementById('calendar-grid');
         const monthLabel = document.getElementById('cal-month-year');
         const seasonStart = new Date(2025, 8, 1);
