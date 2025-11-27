@@ -19,6 +19,7 @@
             --border: #333333;
             --font-main: 'Orbitron', sans-serif; /* Tech feel */
             --font-ancient: 'Cinzel', serif;     /* Egyptian feel */
+            --decode-green: #6fe0b5; /* Matches the background of the DECODE logo */
         }
 
         /* --- RESET & SETUP --- */
@@ -34,7 +35,6 @@
         }
 
         /* --- CAVE TUNNEL BACKGROUND --- */
-        /* This creates the depth and the "light at the end of the tunnel" */
         .cave-bg {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -43,20 +43,19 @@
             animation: torchFlicker 4s infinite alternate ease-in-out;
         }
 
-        /* Simulates ambient torch light moving */
         @keyframes torchFlicker {
             0% { transform: scale(1); opacity: 0.8; }
             50% { transform: scale(1.02); opacity: 1; }
             100% { transform: scale(1); opacity: 0.9; }
         }
 
-        /* --- TUNNEL PARTICLES (THE MOVING STARS) --- */
+        /* --- TUNNEL PARTICLES --- */
         .tunnel-container {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: -2;
             pointer-events: none;
-            perspective: 500px; /* 3D Perspective */
+            perspective: 500px;
             overflow: hidden;
         }
 
@@ -68,12 +67,12 @@
             height: 4px;
             background: var(--gold);
             border-radius: 50%;
-            box-shadow: 0 0 6px var(--crimson); /* Crimson glow */
+            box-shadow: 0 0 6px var(--crimson);
             opacity: 0;
             will-change: transform, opacity;
         }
 
-        /* --- PAGE TRANSITION OVERLAY (The Golden Gates) --- */
+        /* --- PAGE TRANSITION OVERLAY (THE SPLIT IMAGE GATES) --- */
         .transition-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -85,21 +84,36 @@
         .gate-panel {
             width: 50%;
             height: 100%;
-            background: #0a0500; /* Darker cave color */
+            /* Set the background color to match the image so it looks seamless */
+            background-color: var(--decode-green); 
             border-bottom: 5px solid var(--crimson);
             position: relative;
             transform: scaleX(0); 
-            transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
-            background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1h2v2H1V1zm4 4h2v2H5V5zm4 4h2v2H9V9z' fill='%23D4AF37' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+            /* Slower transition for dramatic effect */
+            transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+            
+            /* IMAGE SETTINGS */
+            background-image: url('decode.jpg'); /* Ensure your image is named decode.jpg */
+            background-repeat: no-repeat;
+            /* 
+               Size is 200% width. Since the panel is 50% of the screen, 
+               200% of the panel equals 100% of the screen width.
+            */
+            background-size: 200% auto; 
         }
 
         .gate-left { 
             transform-origin: left; 
-            border-right: 2px solid var(--gold);
+            border-right: 1px solid var(--black);
+            /* Align image to the left edge of the "virtual" full screen */
+            background-position: 0% 50%; 
         }
+
         .gate-right { 
             transform-origin: right; 
-            border-left: 2px solid var(--gold);
+            border-left: 1px solid var(--black);
+            /* Align image to the right edge of the "virtual" full screen */
+            background-position: 100% 50%;
         }
 
         .transition-active .gate-panel {
@@ -110,7 +124,7 @@
             pointer-events: all;
         }
 
-        /* --- SIDEBAR DECODER (Hieroglyphs) --- */
+        /* --- SIDEBAR DECODER --- */
         .decoder-sidebar {
             position: fixed;
             right: 0;
@@ -509,25 +523,25 @@
             <h1>UNEARTH THE <br><span>FUTURE</span></h1>
             
             <div class="robot-showcase">
-                <!-- ROBOT IMAGE - UPDATED -->
+                <!-- ROBOT IMAGE -->
                 <img src="robot-render.png" alt="Team Crimson Robot" class="robot-img">
             </div>
 
             <p style="max-width: 700px; margin: 0 auto; color: var(--sand); font-size: 1.1rem; text-shadow: 0 0 5px black; background: rgba(0,0,0,0.4); padding: 10px; border-radius: 5px;">
-                We are Team Crimson Cardinals 16415, a group that pushes innovation forward with heart and determination. Just as cardinals soar, we aim high and compete with power, skill, and purpose.
+                We are Team Crimson 16415. Like archaeologists of technology, we decode complex problems to build robust robotic solutions.
             </p>
         </div>
 
         <div class="judges-note">
             <h3 style="color: var(--crimson);">The Crimson Impact</h3>
             <p style="color: #ccc;">
-                <strong>Our Mission:</strong> This season, the "Crimson Cardinals" have embraced the DECODE theme. So this season our mission is to soar above challenges by combining precision, ingenuity, inovating, and teamwork, representing the Crimson Cardinals with pride in every competition.
+                <strong>Judge's Abstract:</strong> This season, the "Crimson Cardinals" have embraced the DECODE theme by bridging ancient engineering principles with modern Java programming.
             </p>
             <br>
             <ul style="margin-left: 20px; color: var(--sand);">
-                <li>★ <strong>Outreach:</strong> "Our main outreach theme is trades. Currently we are looking for a trades sponsors.</li>
-                <li>★ <strong>Design:</strong> This year we got inspired by the FRC team The Robonauts 118 Ruckus.</li>
-                <li>★ <strong>Code:</strong> We are using odometry pods on our x-drive base to locate the bot on the feild. We are also using pedro pathing to help code our bot. Also our lead automation is currently mentoring a grade 9 coder.</li>
+                <li>★ <strong>Outreach:</strong> "Hieroglyphs to HTML" coding camp for 40+ students.</li>
+                <li>★ <strong>Design:</strong> Modular chassis design inspired by pyramid structural integrity.</li>
+                <li>★ <strong>Code:</strong> Open-source vision library for the DECODE game elements.</li>
             </ul>
         </div>
     </div>
@@ -554,7 +568,7 @@
             <div class="member-card">
                 <div class="role">Lead Automation.</div>
                 <h3>Shalin Patel.</h3>
-                <p style="color: #999; margin-top: 10px;">Grade 10.</p>
+                <p style="color: #999; margin-top: 10px;">Grade 10. Autonomous & Vision.</p>
             </div>
             <!-- Member 4 -->
             <div class="member-card">
@@ -643,7 +657,6 @@
     <!-- === JAVASCRIPT === -->
     <script>
         // --- TUNNEL MOVEMENT LOGIC ---
-        // This generates particles that fly "Outwards" to simulate moving through a tunnel
         const tunnelContainer = document.getElementById('tunnel');
         const particleCount = 60;
 
@@ -655,23 +668,16 @@
             const p = document.createElement('div');
             p.classList.add('particle');
             
-            // Random angle around the center (0 to 360 degrees)
             const angle = Math.random() * Math.PI * 2;
-            // The distance to travel (off screen)
             const distance = 1000 + Math.random() * 500;
-            
-            // Calculate destination X/Y based on angle
             const destX = Math.cos(angle) * distance;
             const destY = Math.sin(angle) * distance;
-
-            // Randomize size for depth perception (dust vs rocks)
             const size = Math.random() * 3 + 1;
             p.style.width = size + 'px';
             p.style.height = size + 'px';
 
-            // Set up animation using Web Animations API for better performance
-            const duration = 2000 + Math.random() * 3000; // 2s to 5s travel time
-            const delay = randomDelay ? Math.random() * -5000 : 0; // Negative delay to start mid-animation
+            const duration = 2000 + Math.random() * 3000; 
+            const delay = randomDelay ? Math.random() * -5000 : 0; 
 
             const animation = p.animate([
                 { transform: 'translate(-50%, -50%) scale(0)', opacity: 0, offset: 0 },
@@ -682,18 +688,23 @@
                 duration: duration,
                 delay: delay,
                 iterations: Infinity,
-                easing: 'ease-in' // Accelerate out
+                easing: 'ease-in'
             });
 
             tunnelContainer.appendChild(p);
         }
 
-        // --- PAGE TRANSITION LOGIC ---
+        // --- PAGE TRANSITION LOGIC (UPDATED WITH IMAGE & DELAY) ---
         function navigateTo(pageId) {
             const overlay = document.getElementById('transition-overlay');
+            
+            // 1. Start Close Animation (Panels slide in)
             overlay.classList.add('transition-active');
 
+            // 2. Wait for gate close animation (800ms) + The requested 3 Second Delay
+            // Total timeout = 3800ms
             setTimeout(() => {
+                // Switch Content Behind the scenes
                 document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active-page'));
                 document.getElementById(pageId).classList.add('active-page');
                 
@@ -702,11 +713,10 @@
 
                 window.scrollTo(0,0);
 
-                setTimeout(() => {
-                    overlay.classList.remove('transition-active');
-                }, 300); 
+                // Open Gates
+                overlay.classList.remove('transition-active');
 
-            }, 500);
+            }, 3800); // 800ms for slide + 3000ms delay
         }
 
         // --- CALENDAR LOGIC ---
