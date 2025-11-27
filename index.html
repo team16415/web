@@ -707,8 +707,8 @@
             // 1. Start Close Animation (Panels slide in)
             overlay.classList.add('transition-active');
 
-            // 2. Wait for gate close animation (800ms) + 3 Second Delay
-            // Total timeout = 3800ms
+            // 2. Wait for gate close animation (800ms) + 1.5 Second Delay
+            // Total timeout = 2300ms
             setTimeout(() => {
                 // Switch Content Behind the scenes
                 document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active-page'));
@@ -722,7 +722,7 @@
                 // Open Gates
                 overlay.classList.remove('transition-active');
 
-            }, 3800); // 800ms transition + 3000ms pause
+            }, 2300); // 800ms transition + 1500ms pause
         }
 
         // --- CALENDAR LOGIC ---
