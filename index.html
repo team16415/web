@@ -19,7 +19,9 @@
             --border: #333333;
             --font-main: 'Orbitron', sans-serif; /* Tech feel */
             --font-ancient: 'Cinzel', serif;     /* Egyptian feel */
-            --decode-green: #6fe0b5; /* Matches the background of the DECODE logo */
+            
+            /* Matches the background color of the DECODE logo image for seamless blending */
+            --decode-green: #6fe0b5; 
         }
 
         /* --- RESET & SETUP --- */
@@ -72,7 +74,7 @@
             will-change: transform, opacity;
         }
 
-        /* --- PAGE TRANSITION OVERLAY (THE SPLIT IMAGE GATES) --- */
+        /* --- PAGE TRANSITION OVERLAY (SPLIT IMAGE GATES) --- */
         .transition-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -84,8 +86,8 @@
         .gate-panel {
             width: 50%;
             height: 100%;
-            /* Set the background color to match the image so it looks seamless */
-            background-color: var(--decode-green); 
+            /* Set background color to match image for seamless vertical extension */
+            background-color: var(--decode-green);
             border-bottom: 5px solid var(--crimson);
             position: relative;
             transform: scaleX(0); 
@@ -93,11 +95,15 @@
             transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
             
             /* IMAGE SETTINGS */
-            background-image: url('decode.jpg'); /* Ensure your image is named decode.jpg */
+            background-image: url('ftc-decode.webp'); 
             background-repeat: no-repeat;
+            background-position-y: center;
+            
             /* 
-               Size is 200% width. Since the panel is 50% of the screen, 
-               200% of the panel equals 100% of the screen width.
+               CRITICAL LOGIC:
+               The panel is 50vw wide. To make the image look like it spans 100vw,
+               we set the background size to 200% of the panel width.
+               'auto' ensures the height scales proportionally.
             */
             background-size: 200% auto; 
         }
@@ -105,15 +111,15 @@
         .gate-left { 
             transform-origin: left; 
             border-right: 1px solid var(--black);
-            /* Align image to the left edge of the "virtual" full screen */
-            background-position: 0% 50%; 
+            /* Show the LEFT half of the image (0% x-axis) */
+            background-position-x: 0%; 
         }
 
         .gate-right { 
             transform-origin: right; 
             border-left: 1px solid var(--black);
-            /* Align image to the right edge of the "virtual" full screen */
-            background-position: 100% 50%;
+            /* Show the RIGHT half of the image (100% x-axis) */
+            background-position-x: 100%;
         }
 
         .transition-active .gate-panel {
@@ -483,7 +489,7 @@
     <div class="cave-bg"></div>
     <div class="tunnel-container" id="tunnel"></div>
 
-    <!-- TRANSITION GATES -->
+    <!-- TRANSITION GATES (SPLIT IMAGE EFFECT) -->
     <div class="transition-overlay" id="transition-overlay">
         <div class="gate-panel gate-left"></div>
         <div class="gate-panel gate-right"></div>
@@ -694,14 +700,14 @@
             tunnelContainer.appendChild(p);
         }
 
-        // --- PAGE TRANSITION LOGIC (UPDATED WITH IMAGE & DELAY) ---
+        // --- PAGE TRANSITION LOGIC (UPDATED WITH 3S DELAY) ---
         function navigateTo(pageId) {
             const overlay = document.getElementById('transition-overlay');
             
             // 1. Start Close Animation (Panels slide in)
             overlay.classList.add('transition-active');
 
-            // 2. Wait for gate close animation (800ms) + The requested 3 Second Delay
+            // 2. Wait for gate close animation (800ms) + 3 Second Delay
             // Total timeout = 3800ms
             setTimeout(() => {
                 // Switch Content Behind the scenes
@@ -716,7 +722,7 @@
                 // Open Gates
                 overlay.classList.remove('transition-active');
 
-            }, 3800); // 800ms for slide + 3000ms delay
+            }, 3800); // 800ms transition + 3000ms pause
         }
 
         // --- CALENDAR LOGIC ---
