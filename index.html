@@ -20,7 +20,7 @@
             --font-main: 'Orbitron', sans-serif; /* Tech feel */
             --font-ancient: 'Cinzel', serif;     /* Egyptian feel */
             
-            /* Matches the background color of the DECODE logo image for seamless blending */
+            /* Matches the background color of the DECODE logo image */
             --decode-green: #6fe0b5; 
         }
 
@@ -86,39 +86,26 @@
         .gate-panel {
             width: 50%;
             height: 100%;
-            /* Set background color to match image for seamless vertical extension */
             background-color: var(--decode-green);
             border-bottom: 5px solid var(--crimson);
             position: relative;
             transform: scaleX(0); 
-            /* Slower transition for dramatic effect */
             transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
-            
-            /* IMAGE SETTINGS */
             background-image: url('ftc-decode.webp'); 
             background-repeat: no-repeat;
             background-position-y: center;
-            
-            /* 
-               CRITICAL LOGIC:
-               The panel is 50vw wide. To make the image look like it spans 100vw,
-               we set the background size to 200% of the panel width.
-               'auto' ensures the height scales proportionally.
-            */
             background-size: 200% auto; 
         }
 
         .gate-left { 
             transform-origin: left; 
             border-right: 1px solid var(--black);
-            /* Show the LEFT half of the image (0% x-axis) */
             background-position-x: 0%; 
         }
 
         .gate-right { 
             transform-origin: right; 
             border-left: 1px solid var(--black);
-            /* Show the RIGHT half of the image (100% x-axis) */
             background-position-x: 100%;
         }
 
@@ -353,6 +340,63 @@
         
         .role { color: var(--crimson); font-weight: bold; font-family: var(--font-main); font-size: 0.8rem; margin-bottom: 0.5rem; letter-spacing: 1px; }
 
+        /* --- DESIGN PAGE STYLES --- */
+        .design-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        .feature-card {
+            background: var(--panel-bg);
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            position: relative;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+        }
+        .feature-card::before {
+            content: ""; position: absolute; top:0; left:0; width: 100%; height: 3px; background: var(--gold);
+        }
+        /* CSS Blueprint pattern for placeholder CAD */
+        .cad-placeholder {
+            width: 100%; height: 200px;
+            background-color: #001;
+            background-image: linear-gradient(rgba(0, 100, 255, 0.2) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0, 100, 255, 0.2) 1px, transparent 1px);
+            background-size: 20px 20px;
+            display: flex; justify-content: center; align-items: center;
+            border: 1px solid #004;
+            margin-bottom: 1rem;
+            color: #48f; font-family: monospace; font-size: 0.8rem;
+            text-align: center;
+        }
+
+        /* --- OUTREACH PAGE STYLES --- */
+        .stats-row {
+            display: flex; flex-wrap: wrap; gap: 2rem; justify-content: center; margin-bottom: 3rem;
+        }
+        .stat-box {
+            background: rgba(220, 20, 60, 0.1);
+            border: 1px solid var(--crimson);
+            padding: 2rem;
+            text-align: center;
+            flex: 1;
+            min-width: 200px;
+            box-shadow: 0 0 15px rgba(220, 20, 60, 0.1);
+        }
+        .stat-num { font-size: 3rem; font-weight: bold; color: var(--gold); font-family: var(--font-ancient); }
+        .stat-label { color: var(--sand); text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px; }
+        
+        .impact-list li {
+            background: var(--panel-bg);
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border-left: 3px solid var(--gold);
+            list-style: none;
+            transition: 0.3s;
+        }
+        .impact-list li:hover { background: #1a1a1a; transform: translateX(10px); }
+
         /* --- CALENDAR --- */
         .calendar-container {
             background: var(--panel-bg);
@@ -474,7 +518,7 @@
         }
 
         /* Mobile */
-        @media (max-width: 768px) {
+        @media (max-width: 900px) {
             header { flex-direction: column; height: auto; padding: 1rem; }
             nav ul { margin-top: 1rem; flex-wrap: wrap; justify-content: center; }
             nav ul li { margin: 5px 10px; }
@@ -515,7 +559,11 @@
         <nav>
             <ul>
                 <li><a onclick="navigateTo('home')" id="nav-home" class="active">Home</a></li>
-                <li><a onclick="navigateTo('team')" id="nav-team">Meet Our Team</a></li>
+                <li><a onclick="navigateTo('team')" id="nav-team">Team</a></li>
+                <!-- NEW LINKS ADDED HERE -->
+                <li><a onclick="navigateTo('design')" id="nav-design">Design</a></li>
+                <li><a onclick="navigateTo('outreach')" id="nav-outreach">Outreach</a></li>
+                <!-- END NEW LINKS -->
                 <li><a onclick="navigateTo('events')" id="nav-events">Events</a></li>
                 <li><a onclick="navigateTo('contact')" id="nav-contact">Contact</a></li>
             </ul>
@@ -539,16 +587,10 @@
         </div>
 
         <div class="judges-note">
-            <h3 style="color: var(--crimson);">The Crimson Impact</h3>
+            <h3 style="color: var(--crimson);">Mission Status</h3>
             <p style="color: #ccc;">
-                <strong>Judge's Abstract:</strong> This season, the "Crimson Cardinals" have embraced the DECODE theme by bridging ancient engineering principles with modern Java programming.
+                <strong>Season Objective:</strong> DECODE. We are currently iterating on our 3rd prototype chassis and expanding our vision software library.
             </p>
-            <br>
-            <ul style="margin-left: 20px; color: var(--sand);">
-                <li>★ <strong>Outreach:</strong> "Hieroglyphs to HTML" coding camp for 40+ students.</li>
-                <li>★ <strong>Design:</strong> Modular chassis design inspired by pyramid structural integrity.</li>
-                <li>★ <strong>Code:</strong> Open-source vision library for the DECODE game elements.</li>
-            </ul>
         </div>
     </div>
 
@@ -558,58 +600,114 @@
         <p style="color: var(--sand); margin-bottom: 2rem;">Meet the Crimson Cardinals behind the machine.</p>
 
         <div class="team-grid">
-            <!-- Member 1 -->
-            <div class="member-card">
-                <div class="role">Lead Design</div>
-                <h3>Luke Thomas.</h3>
-                <p style="color: #999; margin-top: 10px;">Grade 11.</p>
+            <div class="member-card"><div class="role">Lead Design</div><h3>Luke Thomas.</h3><p style="color: #999; margin-top: 10px;">Grade 11.</p></div>
+            <div class="member-card"><div class="role">Design</div><h3>Dhir Patel.</h3><p style="color: #999; margin-top: 10px;">Grade 10.</p></div>
+            <div class="member-card"><div class="role">Lead Automation.</div><h3>Shalin Patel.</h3><p style="color: #999; margin-top: 10px;">Grade 10. Autonomous & Vision.</p></div>
+            <div class="member-card"><div class="role">Outreach.</div><h3>Fengning Ye.</h3><p style="color: #999; margin-top: 10px;">Grade 10.</p></div>
+            <div class="member-card"><div class="role">Outreach.</div><h3>Jack Mastroianni.</h3><p style="color: #999; margin-top: 10px;">Grade 10.</p></div>
+            <div class="member-card"><div class="role">Lead Trades</div><h3>Rhys Koko.</h3><p style="color: #999; margin-top: 10px;">Grade 11.</p></div>
+            <div class="member-card"><div class="role">Trades</div><h3>Miguel Acuna.</h3><p style="color: #999; margin-top: 10px;">Grade 11.</p></div>
+            <div class="member-card"><div class="role">Lead Strategy</div><h3>Daniel Kulik.</h3><p style="color: #999; margin-top: 10px;">Grade 11.</p></div>
+        </div>
+    </div>
+
+    <!-- === NEW PAGE: BEHIND THE DESIGN === -->
+    <div id="design" class="page-section">
+        <h2>Behind The Design</h2>
+        <p style="color: var(--sand); margin-bottom: 2rem;">Engineering Portfolio Excerpts & Technical Breakdown.</p>
+
+        <div class="design-grid">
+            <!-- Feature 1 -->
+            <div class="feature-card">
+                <div class="cad-placeholder">[ BLUEPRINT: CHASSIS ]</div>
+                <h3 style="color: var(--crimson)">The Pyramid Drivetrain</h3>
+                <p style="color: #ccc; font-size: 0.9rem;">
+                    Our custom chassis features a low center of gravity using a 6-wheel drive drop center configuration. 
+                    The structural integrity is reinforced with custom CNC aluminum plates, ensuring stability during high-speed collisions.
+                </p>
             </div>
-            <!-- Member 2 -->
-            <div class="member-card">
-                <div class="role">Design</div>
-                <h3>Dhir Patel.</h3>
-                <p style="color: #999; margin-top: 10px;">Grade 10.</p>
+
+            <!-- Feature 2 -->
+            <div class="feature-card">
+                <div class="cad-placeholder">[ BLUEPRINT: INTAKE ]</div>
+                <h3 style="color: var(--crimson)">"Nile Flow" Intake</h3>
+                <p style="color: #ccc; font-size: 0.9rem;">
+                    A continuous compliant wheel intake system designed to handle the DECODE game elements (Spheres & Cubes).
+                    The geometry automatically orients game pieces for the transfer system using a dual-stage funnel.
+                </p>
             </div>
-            <!-- Member 3 -->
-            <div class="member-card">
-                <div class="role">Lead Automation.</div>
-                <h3>Shalin Patel.</h3>
-                <p style="color: #999; margin-top: 10px;">Grade 10. Autonomous & Vision.</p>
+
+            <!-- Feature 3 -->
+            <div class="feature-card">
+                <div class="cad-placeholder">[ BLUEPRINT: VISION ]</div>
+                <h3 style="color: var(--crimson)">Computer Vision</h3>
+                <p style="color: #ccc; font-size: 0.9rem;">
+                    Using OpenCV and a custom TensorFlow model, our robot identifies randomization props with 98% accuracy.
+                    We utilize two webcams: one for object detection and one for AprilTag localization.
+                </p>
             </div>
-            <!-- Member 4 -->
-            <div class="member-card">
-                <div class="role">Outreach.</div>
-                <h3>Fengning Ye.</h3>
-                <p style="color: #999; margin-top: 10px;">Grade 10.</p>
+        </div>
+
+        <div class="judges-note">
+            <h3>Iterative Process</h3>
+            <p style="color: #ccc;">We follow the Engineering Design Process. We are currently on <strong>Iteration v3.2</strong> of our Outtake Claw, having moved from a servo-pinch design to a roller-claw design to improve grip on the scoring pylons.</p>
+        </div>
+    </div>
+
+    <!-- === NEW PAGE: OUTREACH === -->
+    <div id="outreach" class="page-section">
+        <h2>Community Impact</h2>
+        <p style="color: var(--sand); margin-bottom: 2rem;">Spreading the message of FIRST and STEM Education.</p>
+
+        <div class="stats-row">
+            <div class="stat-box">
+                <div class="stat-num">500+</div>
+                <div class="stat-label">Students Reached</div>
             </div>
-            <!-- Member 5 -->
-            <div class="member-card">
-                <div class="role">Outreach.</div>
-                <h3>Jack Mastroianni.</h3>
-                <p style="color: #999; margin-top: 10px;">Grade 10.</p>
+            <div class="stat-box">
+                <div class="stat-num">120</div>
+                <div class="stat-label">Volunteer Hours</div>
             </div>
-            <!-- Member 6 -->
-            <div class="member-card">
-                <div class="role">Lead Trades</div>
-                <h3>Rhys Koko.</h3>
-                <p style="color: #999; margin-top: 10px;">Grade 11.</p>
+            <div class="stat-box">
+                <div class="stat-num">5</div>
+                <div class="stat-label">Workshops Hosted</div>
             </div>
-            <!-- Member 7 -->
-            <div class="member-card">
-                <div class="role">Trades</div>
-                <h3>Miguel Acuna.</h3>
-                <p style="color: #999; margin-top: 10px;">Grade 11.</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+            <div>
+                <h3 style="color: var(--crimson); margin-bottom:1rem;">Programs & Events</h3>
+                <ul class="impact-list">
+                    <li>
+                        <strong>"Hieroglyphs to HTML" Coding Camp</strong><br>
+                        <span style="color:#888; font-size:0.9rem;">Taught 40 middle school students the basics of web development and Java logic.</span>
+                    </li>
+                    <li>
+                        <strong>Library Robotics Demo</strong><br>
+                        <span style="color:#888; font-size:0.9rem;">Showcased our 2024 robot to the local community, allowing kids to drive the bot.</span>
+                    </li>
+                    <li>
+                        <strong>FLL Mentorship</strong><br>
+                        <span style="color:#888; font-size:0.9rem;">Our members mentor two local First Lego League teams (Team 1234 & 5678) weekly.</span>
+                    </li>
+                </ul>
             </div>
-            <!-- Member 8 -->
-            <div class="member-card">
-                <div class="role">Lead Strategy</div>
-                <h3>Daniel Kulik.</h3>
-                <p style="color: #999; margin-top: 10px;">Grade 11.</p>
+            <div>
+                <h3 style="color: var(--crimson); margin-bottom:1rem;">Judge's Information</h3>
+                <p style="color: #ccc; margin-bottom: 1rem;">
+                    Team Crimson believes in "Gracious Professionalism". We focus on sustainable engineering—documenting our code and CAD so rookie teams can learn from our work.
+                </p>
+                <div style="background: rgba(212, 175, 55, 0.1); padding: 1.5rem; border: 1px solid var(--gold);">
+                    <h4 style="color: var(--gold); margin-bottom:0.5rem;">Connect Award Focus</h4>
+                    <p style="font-size: 0.9rem; color: #ddd;">
+                        We have connected with 3 local engineering firms (RTX, Boeing, Local FabShop) to get design reviews on our robot, ensuring industry-standard practices.
+                    </p>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- === PAGE 3: EVENTS === -->
+    <!-- === PAGE 5: EVENTS === -->
     <div id="events" class="page-section">
         <h2>Temporal Log</h2>
         <p style="color: var(--sand); margin-bottom: 2rem;">
@@ -631,7 +729,7 @@
         </div>
     </div>
 
-    <!-- === PAGE 4: CONTACT === -->
+    <!-- === PAGE 6: CONTACT === -->
     <div id="contact" class="page-section">
         <h2>Send Inscription</h2>
         <p style="color: var(--sand); margin-bottom: 2rem;">
@@ -707,8 +805,8 @@
             // 1. Start Close Animation (Panels slide in)
             overlay.classList.add('transition-active');
 
-            // 2. Wait for gate close animation (800ms) + 1 Second Delay
-            // Total timeout = 1800ms
+            // 2. Wait for gate close animation (800ms) + 3 Second Delay
+            // Total timeout = 3800ms
             setTimeout(() => {
                 // Switch Content Behind the scenes
                 document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active-page'));
@@ -722,7 +820,7 @@
                 // Open Gates
                 overlay.classList.remove('transition-active');
 
-            }, 1800); // 800ms transition + 1000ms pause
+            }, 3800); // 800ms transition + 3000ms pause
         }
 
         // --- CALENDAR LOGIC ---
