@@ -285,10 +285,16 @@
             border: 1px solid var(--gold);
             padding: 10px;
             border-radius: 15px;
-            max-width: 800px;
+            max-width: 900px; /* Slightly wider to fit 2 images */
             margin: 2rem auto;
             box-shadow: 0 0 50px rgba(220, 20, 60, 0.2);
             position: relative;
+            
+            /* UPDATED: Flexbox for side-by-side images */
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap; /* Stack on mobile */
+            justify-content: center;
         }
         
         .robot-showcase::after, .robot-showcase::before {
@@ -298,7 +304,15 @@
         .robot-showcase::before { top: -5px; left: -5px; border-right: none; border-bottom: none; }
         .robot-showcase::after { bottom: -5px; right: -5px; border-left: none; border-top: none; }
 
-        .robot-img { width: 100%; border-radius: 5px; display: block; }
+        .robot-img { 
+            /* UPDATED: Flexible width for side-by-side */
+            flex: 1;
+            min-width: 300px; /* Prevent squishing on small screens */
+            width: auto;
+            border-radius: 5px; 
+            display: block; 
+            object-fit: cover;
+        }
 
         .judges-note {
             background: var(--panel-bg);
@@ -338,11 +352,11 @@
             box-shadow: 0 5px 25px rgba(212, 175, 55, 0.15);
         }
         
-        /* NEW: Styles for the team member images */
+        /* Styles for the team member images */
         .member-img {
             width: 100%;
-            aspect-ratio: 1 / 1; /* Creates a square */
-            object-fit: cover;   /* Ensures image fills square without stretching */
+            aspect-ratio: 1 / 1; 
+            object-fit: cover;   
             border-radius: 5px;
             border: 1px solid var(--border);
             margin-bottom: 1rem;
@@ -585,8 +599,11 @@
             <h1>UNEARTH THE <br><span>FUTURE</span></h1>
             
             <div class="robot-showcase">
-                <!-- ROBOT IMAGE -->
-                <img src="robot-render.png" alt="Team Crimson Robot" class="robot-img">
+                <!-- RENDER IMAGE -->
+                <img src="robot-render.png" alt="Team Crimson Robot Render" class="robot-img">
+                
+                <!-- REAL LIFE IMAGE (NOTE: Convert HEIC to PNG/JPG for best browser support) -->
+                <img src="robot-irl.heic" alt="Team Crimson Robot Real Life" class="robot-img">
             </div>
 
             <p style="max-width: 700px; margin: 0 auto; color: var(--sand); font-size: 1.1rem; text-shadow: 0 0 5px black; background: rgba(0,0,0,0.4); padding: 10px; border-radius: 5px;">
