@@ -381,7 +381,7 @@
             content: ""; position: absolute; top:0; left:0; width: 100%; height: 3px; background: var(--gold);
         }
         
-        /* DESIGN IMAGES */
+        /* UPDATED: Design Image Style */
         .design-img {
             width: 100%;
             height: 200px;
@@ -389,19 +389,6 @@
             border: 1px solid var(--border);
             margin-bottom: 1rem;
             background: #000;
-        }
-
-        .cad-placeholder {
-            width: 100%; height: 200px;
-            background-color: #001;
-            background-image: linear-gradient(rgba(0, 100, 255, 0.2) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(0, 100, 255, 0.2) 1px, transparent 1px);
-            background-size: 20px 20px;
-            display: flex; justify-content: center; align-items: center;
-            border: 1px solid #004;
-            margin-bottom: 1rem;
-            color: #48f; font-family: monospace; font-size: 0.8rem;
-            text-align: center;
         }
 
         /* --- OUTREACH PAGE STYLES --- */
@@ -610,7 +597,6 @@
             <div class="robot-showcase">
                 <!-- ROBOT IMAGE -->
                 <img src="robot-render.png" alt="Team Crimson Robot Render" class="robot-img">
-                <!-- HEIC FILES NOTE: Browsers often don't support .heic. If this fails, convert to JPG/PNG -->
                 <img src="robot-irl.heic" alt="Team Crimson Robot Real" class="robot-img">
             </div>
 
@@ -627,7 +613,7 @@
         </div>
     </div>
 
-    <!-- === PAGE 2: TEAM === -->
+    <!-- === PAGE 2: TEAM (UPDATED WITH IMAGES) === -->
     <div id="team" class="page-section">
         <h2>The Architects</h2>
         <p style="color: var(--sand); margin-bottom: 2rem;">Meet the Crimson Cardinals behind the machine.</p>
@@ -699,18 +685,18 @@
                 </p>
             </div>
 
-            <!-- Feature 2 (UPDATED WITH JPEG IMAGE) -->
+            <!-- Feature 2 -->
             <div class="feature-card">
-                <img src="intake.png" alt="Intake System" class="design-img">
+                <img src="Intake.png" alt="Intake System" class="design-img">
                 <h3 style="color: var(--crimson)">Intake</h3>
                 <p style="color: #ccc; font-size: 0.9rem;">
                     Our current intake uses a horizontal roller system with 2 inch flex wheels designed to pull game pieces into the robot, no matter where the ball is in front of the robot. Its wide contact area and grippy wheels allow it to collect pieces from multiple angles, improving consistency during fast cycles. The omni-wheels provide direction so that the ball rolls into the flex wheels. Overall, this intake gives us a reliable first stage of our scoring system and helps support our fast, controlled gameplay strategy.
                 </p>
             </div>
 
-            <!-- Feature 3 (UPDATED WITH JPEG IMAGE) -->
+            <!-- Feature 3 -->
             <div class="feature-card">
-                <img src="indexer.png" alt="Indexer Mechanism" class="design-img">
+                <img src="Indexer.png" alt="Indexer Mechanism" class="design-img">
                 <h3 style="color: var(--crimson)">Indexer</h3>
                 <p style="color: #ccc; font-size: 0.9rem;">
                     Our indexer uses a compact, a roller system designed to keep game pieces moving smoothly through the robot. We used belts which help center and control each piece, reducing the chance of jams as they transition toward the shooter. Its structure is clean, accessible, and easy to repair, which makes repairs and adjustments quick during competition. Overall, this indexer provides a consistent and dependable link between our intake and shooter, keeping our scoring cycles fast and efficient.
@@ -728,8 +714,8 @@
         </div>
 
         <div class="judges-note">
-            <h3>Design Inspiration</h3>
-            <p style="color: #ccc;">At the start of the season we looked at many designs from the </p>
+            <h3>Iterative Process</h3>
+            <p style="color: #ccc;">We follow the Engineering Design Process. We are currently on <strong>Iteration v3.2</strong> of our Outtake Claw, having moved from a servo-pinch design to a roller-claw design to improve grip on the scoring pylons.</p>
         </div>
     </div>
 
